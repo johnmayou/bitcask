@@ -3,12 +3,12 @@ require_relative 'bitcask.rb'
 
 class TestBitcask < Minitest::Test
   def setup
-    @file = 'test.db'
-    @store = Bitcask::DiskStore.new(@file)
+    @filename = 'test.db'
+    @store = Bitcask::DiskStore.new(@filename)
   end
 
   def teardown
-    File.delete(@file)
+    File.delete(@filename)
   end
 
   def test_returns_empty_string
@@ -16,8 +16,8 @@ class TestBitcask < Minitest::Test
   end
 
   def test_string
-    @store.put('key', 'value')
-    assert_equal 'value', @store.get('key')
+    @store.put('key', 'val')
+    assert_equal 'val', @store.get('key')
   end
 
   def test_integer
@@ -31,18 +31,27 @@ class TestBitcask < Minitest::Test
   end
 
   def test_key_override
-    @store = Bitcask::DiskStore.new(@file)
-    @store.put('key', 'value')
-    @store.put('key', 'value2')
-    assert_equal 'value2', @store.get('key')
+    @store = Bitcask::DiskStore.new(@filename)
+    @store.put('key', 'val')
+    @store.put('key', 'val2')
+    assert_equal 'val2', @store.get('key')
   end
 
   def test_multiple_keys
-    @store = Bitcask::DiskStore.new(@file)
-    @store.put('key1', 'value1')
-    @store.put('key2', 'value2')
-    @store.put('key3', 'value3')
-    assert_equal ['value1', 'value2', 'value3'],
+    @store = Bitcask::DiskStore.new(@filename)
+    @store.put('key1', 'val1')
+    @store.put('key2', 'val2')
+    @store.put('key3', 'val3')
+    assert_equal ['val1', 'val2', 'val3'],
       [@store.get('key1'), @store.get('key2'), @store.get('key3')]
+  end
+
+  def test_existing_database
+    @store = Bitcask::DiskStore.new(@filename)
+    @store.put('key1', 'val1')
+    @store.put('key2', 'val2')
+    new_store = Bitcask::DiskStore.new(@filename)
+    assert_equal ['val1', 'val2'],
+      [new_store.get('key1'), new_store.get('key2')]
   end
 end
