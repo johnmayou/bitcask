@@ -32,14 +32,12 @@ class TestBitcask < Minitest::Test
   end
 
   def test_key_override
-    @store = Bitcask::DiskStore.new(@filename)
     @store.put('key', 'val')
     @store.put('key', 'val2')
     assert_equal 'val2', @store.get('key')
   end
 
   def test_multiple_keys
-    @store = Bitcask::DiskStore.new(@filename)
     @store.put('key1', 'val1')
     @store.put('key2', 'val2')
     @store.put('key3', 'val3')
@@ -48,7 +46,6 @@ class TestBitcask < Minitest::Test
   end
 
   def test_existing_database
-    @store = Bitcask::DiskStore.new(@filename)
     @store.put('key1', 'val1')
     @store.put('key2', 'val2')
     @store.close
