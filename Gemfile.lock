@@ -1,12 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    benchmark-ips (2.14.0)
 
 PLATFORMS
   arm64-darwin-24
   ruby
 
 DEPENDENCIES
+  benchmark-ips
 
 BUNDLED WITH
    2.6.2
