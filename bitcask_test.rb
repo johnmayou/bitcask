@@ -8,6 +8,7 @@ class TestBitcask < Minitest::Test
   end
 
   def teardown
+    @store.close
     File.delete(@filename)
   end
 
@@ -50,8 +51,9 @@ class TestBitcask < Minitest::Test
     @store = Bitcask::DiskStore.new(@filename)
     @store.put('key1', 'val1')
     @store.put('key2', 'val2')
-    new_store = Bitcask::DiskStore.new(@filename)
+    @store.close
+    @store = Bitcask::DiskStore.new(@filename)
     assert_equal ['val1', 'val2'],
-      [new_store.get('key1'), new_store.get('key2')]
+      [@store.get('key1'), @store.get('key2')]
   end
 end
