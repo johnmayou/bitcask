@@ -12,7 +12,7 @@ class TestBitcask < Minitest::Test
     File.delete(@filename)
   end
 
-  def test_returns_empty_string
+  def test_key_missing
     assert_equal '', @store.get('random')
   end
 
