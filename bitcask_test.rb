@@ -40,17 +40,28 @@ class TestBitcask < Minitest::Test
   def test_multiple_keys
     @store.put('key1', 'val1')
     @store.put('key2', 'val2')
-    @store.put('key3', 'val3')
-    assert_equal ['val1', 'val2', 'val3'],
-      [@store.get('key1'), @store.get('key2'), @store.get('key3')]
+    assert_equal ['val1', 'val2'], [@store.get('key1'), @store.get('key2')]
   end
 
-  def test_existing_database
+  def test_keys
+    @store.put('key1', 'val1')
+    @store.put('key2', 'val2')
+    assert_equal ['key1', 'key2'], @store.keys.sort
+  end
+
+  def test_size
+    @store.put('key1', 'val1')
+    @store.put('key2', 'val2')
+    assert_equal 2, @store.size
+  end
+
+  def test_existing_file
     @store.put('key1', 'val1')
     @store.put('key2', 'val2')
     @store.close
     @store = Bitcask::DiskStore.new(@filename)
-    assert_equal ['val1', 'val2'],
-      [@store.get('key1'), @store.get('key2')]
+    assert_equal ['val1', 'val2'], [@store.get('key1'), @store.get('key2')]
+    assert_equal ['key1', 'key2'], @store.keys.sort
+    assert_equal 2, @store.size
   end
 end
